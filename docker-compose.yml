@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./server
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_NAME=disaster_db
+      - DB_USER=root
+      - DB_PASS=root_password
+      - JWT_TOKEN=your_jwt_secret
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./client
+    ports:
+      - "5050:5050"
+    depends_on:
+      - backend
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: disaster_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
