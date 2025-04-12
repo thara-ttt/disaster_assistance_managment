@@ -1,39 +1,69 @@
-version: '3.8'
 
-services:
-  backend:
-    build:
-      context: ./server
-    ports:
-      - "5000:5000"
-    environment:
-      - DB_NAME=disaster_db
-      - DB_USER=root
-      - DB_PASS=root_password
-      - JWT_TOKEN=your_jwt_secret
-    depends_on:
-      - db
 
-  frontend:
-    build:
-      context: ./client
-    ports:
-      - "5050:5050"
-    depends_on:
-      - backend
-
-  db:
-    image: mysql:8.0
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: disaster_db
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root_password
-    ports:
-      - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
+networks:
+  dams-internal-network:
+    driver: bridge
+  dams-external-network:
+    driver: bridge
 
 volumes:
-  db_data:
+  dams-postgres-data:
+
+services:
+  dams-postgres:
+    image: postgres:latest
+    container_name: dams-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - dams-postgres-data:/var/lib/postgresql/data
+    networks:
+      - dams-internal-network
+
+  dams-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    # image: ghcr.io/tharattt/dams-server:latest
+    container_name: dams-server
+    restart: always
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      DB_HOST: dams-postgres
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+      DB_DIALECT: ${DB_DIALECT}
+      JWT_TOKEN: ${JWT_TOKEN}
+      PORT: ${SERVER_PORT}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    depends_on:
+      - dams-postgres
+    networks:
+      - dams-internal-network
+      - dams-external-network
+
+  dams-client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: dams-client
+    restart: always
+    environment:
+      CLIENT_HOST: "0.0.0.0"
+      CLIENT_PORT: ${CLIENT_PORT}
+      SERVER_HOST: "dams-server"
+      SERVER_PORT: ${SERVER_PORT}
+    ports:
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
+    depends_on:
+      - dams-server
+    networks:
+      - dams-external-network

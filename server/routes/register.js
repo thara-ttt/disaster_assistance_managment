@@ -7,8 +7,8 @@ const router = express.Router()
 // @desc    Register user
 // @access  Public
 router.post("/register", async (req, res)=> {
-    const {fullName, email, password, role, zipcode}=req.body;
-
+    let {fullName, email, password, role, zipcode}=req.body;
+    role= role.toLowerCase();
     const alreadyExistsUser=await User.findOne({where: {email}}).catch(
         (err)=> {
             console.log("Error: ", err);}
