@@ -1,15 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
 import requests
 import json
+import os
 
 app = Flask(__name__)
 json_header = 'application/JSON'
 api_header = 'application/x-www-form-urlencoded'
 
+SERVER_HOST = os.environ.get('SERVER_HOST', 'localhost')
+SERVER_PORT = os.environ.get('SERVER_PORT', '5000')
+CLIENT_HOST = os.environ.get('CLIENT_HOST', 'localhost')
+CLIENT_PORT = os.environ.get('CLIENT_PORT', '5050')
+
 def updating_matching(req_id, don_id):
     token = request.cookies.get('JWT')
     pledges = requests.get(
-        'http://localhost:5000/api/v1/get_pledges',
+        f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/get_pledges',
         headers={
             'x-auth-token': token
         }
@@ -17,7 +23,7 @@ def updating_matching(req_id, don_id):
     pledges = json.loads(pledges.text)['pledges']
 
     res = requests.get(
-        'http://localhost:5000/api/v1/donor',
+        f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/donor',
         headers={
             'x-auth-token': token
         }
@@ -77,7 +83,7 @@ def updating_matching(req_id, don_id):
             'item_quantities': new_pledge_item_quan
         }
         res = requests.post(
-            'http://localhost:5000/api/v1/update_pledge',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/update_pledge',
             headers={
                 'Content-Type': api_header,
                 'x-auth-token': token
@@ -99,7 +105,7 @@ def updating_matching(req_id, don_id):
             'items': new_donation_item_quan
         }
         res = requests.post(
-            'http://localhost:5000/api/v1/make_donation',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/make_donation',
             headers={
                 'Content-Type': api_header,
                 'x-auth-token': token
@@ -118,14 +124,14 @@ def manual_matching():
     if request.method == 'GET':
         token = request.cookies.get('JWT')
         res = requests.get(
-            'http://localhost:5000/api/v1/donor',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/donor',
             headers={
                 'x-auth-token': token
             }
         )
 
         pledges = requests.get(
-            'http://localhost:5000/api/v1/get_pledges',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/get_pledges',
             headers={
                 'x-auth-token': token
             }
@@ -167,7 +173,7 @@ def edit_event(event_name):
         }
         token = request.cookies.get('JWT')
         res = requests.get(
-            'http://localhost:5000/api/v1/get_event',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/get_event',
             headers={
                 'Content-Type': api_header,
                 'x-auth-token': token
@@ -222,7 +228,7 @@ def edit_event(event_name):
         }
         token = request.cookies.get('JWT')
         res = requests.post(
-            'http://localhost:5000/api/v1/edit_event',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/edit_event',
             headers={
                 'Content-Type': api_header,
                 'x-auth-token': token
@@ -243,7 +249,7 @@ def expire_event(event_name):
         }
         token = request.cookies.get('JWT')
         res = requests.post(
-            'http://localhost:5000/api/v1/expire_event',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/expire_event',
             headers={
                 'Content-Type': api_header,
                 'x-auth-token': token
@@ -279,7 +285,7 @@ def pledge():
         
         token = request.cookies.get('JWT')
         res = requests.post(
-            'http://localhost:5000/api/v1/pledge_resources',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/pledge_resources',
             headers={
                 'Content-Type': api_header,
                 'x-auth-token': token
@@ -328,7 +334,7 @@ def make_donation():
         print(data_payload)
         token = request.cookies.get('JWT')
         res = requests.post(
-            'http://localhost:5000/api/v1/make_donation',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/make_donation',
             headers={
                 'Content-Type': api_header,
                 'x-auth-token': token
@@ -366,7 +372,7 @@ def request_resources():
         
         token = request.cookies.get('JWT')
         res = requests.post(
-            'http://localhost:5000/api/v1/request_resources',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/request_resources',
             headers={
                 'Content-Type': api_header,
                 'x-auth-token': token
@@ -414,7 +420,7 @@ def create_event():
         }
         token = request.cookies.get('JWT')
         res = requests.post(
-            'http://localhost:5000/api/v1/create_event',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/create_event',
             headers={
                 'Content-Type': api_header,
                 'x-auth-token': token
@@ -470,7 +476,7 @@ def register():
         }
         
         res = requests.post(
-            'http://localhost:5000/api/v1/register',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/register',
             headers={
                 'Content-Type': api_header,
             },
@@ -498,7 +504,7 @@ def login():
         password = form['password']
 
         res = requests.post(
-            'http://localhost:5000/api/v1/login',
+            f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/login',
             headers={
                 'Content-Type': api_header
             },
@@ -531,7 +537,7 @@ def login():
     
 def admin_dashboard(token):
     res = requests.get(
-        'http://localhost:5000/api/v1/admin',
+        f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/admin',
         headers={
                     'x-auth-token': token
                 }
@@ -556,7 +562,7 @@ def admin_dashboard(token):
 
 def update_pledges(token):
     pledges = requests.get(
-        'http://localhost:5000/api/v1/get_pledges',
+        f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/get_pledges',
         headers={
             'x-auth-token': token
         }
@@ -564,7 +570,7 @@ def update_pledges(token):
     pledges = json.loads(pledges.text)['pledges']
 
     res = requests.get(
-        'http://localhost:5000/api/v1/donor',
+        f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/donor',
         headers={
             'x-auth-token': token
         }
@@ -612,7 +618,7 @@ def update_pledges(token):
                     'item_quantities': new_pledge_item_quan
                 }
                 res = requests.post(
-                    'http://localhost:5000/api/v1/update_pledge',
+                    f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/update_pledge',
                     headers={
                         'Content-Type': api_header,
                         'x-auth-token': token
@@ -634,7 +640,7 @@ def update_pledges(token):
                     'items': new_donation_item_quan
                 }
                 res = requests.post(
-                    'http://localhost:5000/api/v1/make_donation',
+                    f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/make_donation',
                     headers={
                         'Content-Type': api_header,
                         'x-auth-token': token
@@ -646,7 +652,7 @@ def update_pledges(token):
 def donor_dashboard(token, display_message=""):
     # update_pledges(token)
     res = requests.get(
-        'http://localhost:5000/api/v1/donor',
+        f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/donor',
         headers={
                         'x-auth-token': token
                     }
@@ -676,7 +682,7 @@ def donor_dashboard(token, display_message=""):
 
 def recipient_dashboard(token, display_message=""):
     res = requests.get(
-        'http://localhost:5000/api/v1/recipient',
+        f'http://{SERVER_HOST}:{SERVER_PORT}/api/v1/recipient',
         headers={
                         'x-auth-token': token
                     }
@@ -730,7 +736,7 @@ def dashboard():
 @app.route('/')
 def dams_homepage():
     res = requests.get(
-        'http://localhost:5000/',
+        f'http://{SERVER_HOST}:{SERVER_PORT}/',
         params={})
     
     json.loads(res.text)['status']
@@ -743,4 +749,4 @@ def dams_homepage():
     return response
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5050)
+    app.run(debug=True, port=CLIENT_PORT, host=CLIENT_HOST)
