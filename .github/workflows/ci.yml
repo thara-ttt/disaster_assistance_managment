@@ -26,5 +26,6 @@ jobs:
     secrets: inherit
 
   build-and-push-docker-image:
+    if: github.event_name == 'release' || github.event_name == 'push' && github.ref_name == 'main'
     uses: ./.github/workflows/docker-ci.yml
     secrets: inherit
