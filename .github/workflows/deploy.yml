@@ -65,7 +65,7 @@ jobs:
           ENV_PATH: /home/ubuntu/.env
         run: |
 
-          cat ${{ secrets.ANSIBLE_SSH_PRIVATE_KEY_FILE }} | tr -d '\r' > ansible_key.pem
+          printf "%s" "${{ secrets.ANSIBLE_SSH_PRIVATE_KEY_FILE }}" | tr -d '\r' > ansible_key.pem
           chmod 600 ansible_key.pem
           ansible-playbook ansible/deploy-project-ci.yml \
           -i ${{ secrets.ANSIBLE_HOST_IP}}, --extra-vars "ansible_user=${{ secrets.ANSIBLE_USER }}" \
