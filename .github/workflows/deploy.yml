@@ -64,11 +64,13 @@ jobs:
           DOCKER_COMPOSE_PATH: /home/ubuntu/docker-compose.yml
           ENV_PATH: /home/ubuntu/.env
         run: |
-          ansible-playbook ansible/deploy-project.yml \
+
+          cat ${{ secrets.ANSIBLE_SSH_PRIVATE_KEY_FILE }} | tr -d '\r' > ansible_key.pem
+          chmod 600 ansible_key.pem
+          ansible-playbook ansible/deploy-project-ci.yml \
           -i ${{ secrets.ANSIBLE_HOST_IP}}, --extra-vars "ansible_user=${{ secrets.ANSIBLE_USER }}" \
-          --extra-vars"ansible_ssh_private_key_file=${{ secrets.ANSIBLE_SSH_PRIVATE_KEY_FILE }}" \
-          --private-key ${{ secrets.ANSIBLE_SSH_PRIVATE_KEY_FILE }} \
-          --user ${{ secrets.ANSIBLE_USER }}  --extra-vars "s3_bucket=${{ secrets.S3_BUCKET }}" \
+          --extra-vars"ansible_ssh_private_key_file=ansible_key.pem" \
+          --extra-vars "s3_bucket=${{ secrets.S3_BUCKET }}" \
           --extra-vars "s3_object=${{ secrets.S3_OBJECT }}" \
           --extra-vars "s3_object_env=${{ secrets.S3_OBJECT_ENV }}" \
           --extra-vars "docker_compose_path=/home/ubuntu/docker-compose.yml" \
@@ -76,3 +78,4 @@ jobs:
           --extra-vars "aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
           --extra-vars "aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
           --extra-vars "aws_region=us-east-1"
+          rm ansible_key.pem
