@@ -21,9 +21,9 @@ jobs:
       node-version: '22'
 
   sonarqube:
-  needs: [run-client-tests]
-  uses: ./.github/workflows/sonarqube.yml
-  secrets: inherit
+    needs: [run-client-tests]
+    uses: ./.github/workflows/sonarqube.yml
+    secrets: inherit
 
   build-and-push-docker-image:
     uses: ./.github/workflows/docker-ci.yml
