@@ -10,6 +10,10 @@ app.get('/', (req, res) => {
     res.send('Hello from the backend!');
 });
 
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'API Running' });
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

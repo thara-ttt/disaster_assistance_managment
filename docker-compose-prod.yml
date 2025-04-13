@@ -31,10 +31,7 @@ services:
       - dams-internal-network
 
   dams-server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    # image: ghcr.io/thara-ttt/disaster_assistance_managment/server:main
+    image: ghcr.io/thara-ttt/disaster_assistance_managment/server:main
     container_name: dams-server
     restart: always
     healthcheck:
@@ -62,10 +59,7 @@ services:
       - dams-external-network
 
   dams-client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    # image: ghcr.io/thara-ttt/disaster_assistance_managment/client:main
+    image: ghcr.io/thara-ttt/disaster_assistance_managment/client:main
     container_name: dams-client
     restart: always
     healthcheck:
