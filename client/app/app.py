@@ -113,6 +113,10 @@ def updating_matching(req_id, don_id):
             data=data_payload
         )
 
+@app.route('/health', methods=['GET'])
+def health():
+    return 'OK', 200
+
 @app.route('/match/<req_id>/<don_id>', methods=['GET', 'POST'])
 def match(req_id, don_id):
     updating_matching(req_id, don_id)

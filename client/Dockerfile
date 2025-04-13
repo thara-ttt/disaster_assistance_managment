@@ -1,6 +1,9 @@
 # python project
 FROM python:3.13-alpine
 
+RUN apk add curl && \
+    rm -rf /var/cache/apk/*
+
 WORKDIR /app
 
 COPY ./requirements.txt .
