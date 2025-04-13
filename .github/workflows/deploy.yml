@@ -69,7 +69,7 @@ jobs:
           chmod 600 ansible_key.pem
           ansible-playbook ansible/deploy-project-ci.yml \
           -i ${{ secrets.ANSIBLE_HOST_IP}}, --extra-vars "ansible_user=${{ secrets.ANSIBLE_USER }}" \
-          --extra-vars"ansible_ssh_private_key_file=ansible_key.pem" \
+          --extra-vars "ansible_ssh_private_key_file=ansible_key.pem" \
           --extra-vars "s3_bucket=${{ secrets.S3_BUCKET }}" \
           --extra-vars "s3_object=${{ secrets.S3_OBJECT }}" \
           --extra-vars "s3_object_env=${{ secrets.S3_OBJECT_ENV }}" \
