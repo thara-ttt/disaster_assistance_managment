@@ -69,7 +69,7 @@ jobs:
           chmod 600 ansible_key.pem
           ansible-playbook ansible/deploy-project-ci.yml \
           -i ${{ secrets.ANSIBLE_HOST_IP}}, --extra-vars "ansible_user=${{ secrets.ANSIBLE_USER }}" \
-          --extra-vars "ansible_ssh_common_args='-o StrictHostKeyChecking=no' -o UserKnownHostsFile=/dev/null'" \
+          --extra-vars "ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'" \
           --extra-vars "ansible_host=${{ secrets.ANSIBLE_HOST_IP }}" \
           --extra-vars "ansible_ssh_private_key_file=ansible_key.pem" \
           --extra-vars "s3_bucket=${{ secrets.S3_BUCKET }}" \
