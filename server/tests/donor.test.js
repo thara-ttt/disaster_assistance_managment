@@ -9,18 +9,27 @@ describe("Test Donor Dashboard", async () => {
     beforeAll(async () => {
         await sequelize.sync({ force: true })
     })
+    afterAll(async () => {
+        await sequelize.sync({ force: true })
+        await sequelize.drop({ force: true })
+        await sequelize.close()
+    })
+
+    const donorUsername = `donor${Date.now()}donortest`;
+    const recipientUsername = `recipient${Date.now()}donortest`;
+    const adminUsername = `admin${Date.now()}donortest`;
 
     const donorUser=new User({
-        fullName: 'Donor',
-        email: 'donor@donor.com',
+        fullName: donorUsername,
+        email: `${donorUsername}@donor.com`,
         password: '123456',
         role: 'donor',
         zipcode: '52242'
     });
 
     const adminUser=new User({
-        fullName: 'Admin',
-        email: 'admin@admin.com',
+        fullName: adminUsername,
+        email: `${adminUsername}@admin.com`,
         password: '123456',
         role: 'admin',
         zipcode: 'zipcode'
@@ -28,7 +37,7 @@ describe("Test Donor Dashboard", async () => {
 
     const recipientUser=new User({
         fullName: 'Recipient',
-        email: 'recipient@recipient.com',
+        email: `${recipientUsername}@recipient.com`,
         password: '123456',
         role: 'recipient',
         zipcode: '52242'
@@ -41,7 +50,7 @@ describe("Test Donor Dashboard", async () => {
         });
         
         const donor = {
-            email: 'donor@donor.com',
+            email: `${donorUsername}@donor.com`,
             password: '123456',
         };
         
@@ -97,8 +106,8 @@ describe("Test Donor Dashboard", async () => {
         });
         
         const donor = {
-            email: 'donor@donor.com',
-            password: '123456',
+            email: `${donorUsername}@donor.com`,
+            password: '123456'
         };
         
         let jwtToken = '';
@@ -129,7 +138,7 @@ describe("Test Donor Dashboard", async () => {
         });
         
         const admin = {
-            email: 'admin@admin.com',
+            email: `${adminUsername}@admin.com`,
             password: '123456',
         };
         
@@ -168,7 +177,7 @@ describe("Test Donor Dashboard", async () => {
         });
         
         const donor = {
-            email: 'donor@donor.com',
+            email: `${donorUsername}@donor.com`,
             password: '123456',
         };
         
@@ -188,7 +197,7 @@ describe("Test Donor Dashboard", async () => {
         });
         
         const recipient = {
-            email: 'recipient@recipient.com',
+            email: `${recipientUsername}@recipient.com`,
             password: '123456',
         };
         
@@ -213,7 +222,7 @@ describe("Test Donor Dashboard", async () => {
 
         resource_request_payload = {
             'event_name': 'Katrina',
-            'email': 'recipient@recipient.com',
+            'email': `${recipientUsername}@recipient.com`,
             'item_quantities': 'Blankets:20'
         }
 
@@ -236,7 +245,7 @@ describe("Test Donor Dashboard", async () => {
         });
         
         const admin_2 = {
-            email: 'admin@admin.com',
+            email: `${adminUsername}@admin.com`,
             password: '123456',
         };
         
@@ -254,7 +263,7 @@ describe("Test Donor Dashboard", async () => {
         await request(app)
         .post("/api/v1/make_donation")
         .set({'x-auth-token': jwtToken})
-        .send({'event_name': 'Katrina', 'donor_email': 'donor@donor.com', 'recipient_email': 'recipient@recipient.com', 'items': ''})
+        .send({'event_name': 'Katrina', 'donor_email': `${donorUsername}@donor.com`, 'recipient_email': `${recipientUsername}@recipient.com`, 'items': ''})
         .then(async (response) => {
             expect(response.statusCode).toBe(200);
             expect(response.body.message).toBe('Donation Successfull!');
@@ -287,7 +296,7 @@ describe("Test Donor Dashboard", async () => {
         });
         
         const donor = {
-            email: 'donor@donor.com',
+            email: `${donorUsername}@donor.com`,
             password: '123456',
         };
         
@@ -318,7 +327,7 @@ describe("Test Donor Dashboard", async () => {
         });
         
         const donor = {
-            email: 'donor@donor.com',
+            email: `${donorUsername}@donor.com`,
             password: '123456',
         };
         
@@ -336,7 +345,7 @@ describe("Test Donor Dashboard", async () => {
         await request(app)
         .post("/api/v1/pledge_resources")
         .set({'x-auth-token': jwtToken})
-        .send({'email': 'donor@donor.com', 'item_quantities': 'Blankets:20'})
+        .send({'email': `${donorUsername}@donor.com`, 'item_quantities': 'Blankets:20'})
         .then(async (response) => {
             expect(response.statusCode).toBe(200);
             expect(response.body.message).toBe('Pledge made successfully');

@@ -10,9 +10,17 @@ describe("Test Admin Dashboard", async () => {
         await sequelize.sync({ force: true })
     })
 
+    afterAll(async () => {
+        await sequelize.sync({ force: true })
+        await sequelize.drop({ force: true })
+        await sequelize.close()
+    })
+
+    const user = 'admin'+Date.now()+'admin-test';
+
     const adminUser=new User({
-        fullName: 'Admin',
-        email: 'admin@admin.com',
+        fullName: user,
+        email: `${user}@admin.com`,
         password: '123456',
         role: 'admin',
         zipcode: 'zipcode'
@@ -25,7 +33,7 @@ describe("Test Admin Dashboard", async () => {
         });
         
         const admin = {
-            email: 'admin@admin.com',
+            email: `${user}@admin.com`,
             password: '123456',
         };
         
@@ -57,7 +65,7 @@ describe("Test Admin Dashboard", async () => {
         });
         
         const admin = {
-            email: 'admin@admin.com',
+            email: `${user}@admin.com`,
             password: '123456',
         };
         
@@ -118,7 +126,7 @@ describe("Test Admin Dashboard", async () => {
         });
         
         const admin = {
-            email: 'admin@admin.com',
+            email: `${user}@admin.com`,
             password: '123456',
         };
         
@@ -198,7 +206,7 @@ describe("Test Admin Dashboard", async () => {
         });
         
         const admin = {
-            email: 'admin@admin.com',
+            email: `${user}@admin.com`,
             password: '123456',
         };
         
@@ -268,7 +276,7 @@ describe("Test Admin Dashboard", async () => {
         });
         
         const admin = {
-            email: 'admin@admin.com',
+            email: `${user}@admin.com`,
             password: '123456',
         };
         

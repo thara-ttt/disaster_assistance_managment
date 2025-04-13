@@ -1,58 +1,43 @@
-name: CI/CD Pipeline
+name: Build and Push Docker Images
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_call:
 
 jobs:
-  build-and-deploy:
+  build-and-push-docker-image:
     runs-on: ubuntu-latest
-
-    services:
-      db:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root_password
-          MYSQL_DATABASE: your_database_name
-          MYSQL_USER: your_database_user
-          MYSQL_PASSWORD: your_database_password
-        ports:
-          - 3306:3306
-
     steps:
-    # Checkout the repository
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    # Set up Docker
-    - name: Set up Docker
-      uses: docker/setup-buildx-action@v2
-
-    # Log in to Docker Hub (optional, if pushing images to Docker Hub)
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
-    # Build and push backend Docker image
-    - name: Build and push backend image
-      run: |
-        docker build -t your-dockerhub-username/backend ./server
-        docker push your-dockerhub-username/backend
-
-    # Build and push frontend Docker image
-    - name: Build and push frontend image
-      run: |
-        docker build -t your-dockerhub-username/frontend ./client
-        docker push your-dockerhub-username/frontend
-
-    # Deploy (optional, if deploying to AWS or another platform)
-    - name: Deploy to AWS (example)
-      run: |
-        echo "Deploying to AWS..."
-        # Add your deployment commands here
+      - name: Run Docker Buildx for client
+        working-directory: client
+        shell: bash
+        run: |
+          if [[ ${{ github.event_name }} == 'release' ]]; then
+            export TAG="${{ github.event.release.tag_name }}"
+          elif [[ ${{ github.event_name }} == 'push' && ${{ github.ref_name }} == 'main' ]]; then
+            export TAG="latest"
+          else
+            export TAG="${{ github.ref_name }}"
+          fi
+          docker buildx create --use
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/client:$TAG .
+          if [[ $TAG == 'latest' ]]; then
+            docker buildx build --platform linux/amd64,linux/arm64 --push -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/client:main .
+          fi
+      - name: Run Docker Buildx for server
+        working-directory: server
+        run: |
+          if [[ ${{ github.event_name }} == 'release' ]]; then
+            export TAG="${{ github.event.release.tag_name }}"
+          elif [[ ${{ github.event_name }} == 'push' && ${{ github.ref_name }} == 'main' ]]; then
+            export TAG="latest"
+          else
+            export TAG="${{ github.ref_name }}"
+          fi
+          docker buildx create --use
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/server:$TAG .
+          if [[ $TAG == 'latest' ]]; then
+            docker buildx build --platform linux/amd64,linux/arm64 --push -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/server:main .
+          fi

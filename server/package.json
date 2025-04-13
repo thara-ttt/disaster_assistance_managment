@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index",
     "server": "nodemon index",
-    "test": "jest --forceExit  --runInBand --silent"
+    "test": "jest --forceExit  --runInBand --silent",
+    "test-cicd": "jest --forceExit  --runInBand --silent --coverage"
   },
   "jest": {
     "collectCoverage": true,
