@@ -12,9 +12,6 @@ on:
 
 name: Main Workflow
 jobs:
-  sonarqube:
-    uses: ./.github/workflows/sonarqube.yml
-    secrets: inherit
 
   run-client-tests:
     uses: ./.github/workflows/client-testing.yml
@@ -22,6 +19,11 @@ jobs:
     with:
       python-version: '3.11'
       node-version: '22'
+
+  sonarqube:
+  needs: [run-client-tests]
+  uses: ./.github/workflows/sonarqube.yml
+  secrets: inherit
 
   build-and-push-docker-image:
     uses: ./.github/workflows/docker-ci.yml
