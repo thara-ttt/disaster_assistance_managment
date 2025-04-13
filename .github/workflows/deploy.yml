@@ -39,7 +39,7 @@ jobs:
   #         aws s3 cp .env s3://${{ secrets.S3_BUCKET }}/${{ secrets.S3_OBJECT_ENV }}
 
   deploy-project:
-    needs: add-docker-compose-to-s3
+    # needs: add-docker-compose-to-s3
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
