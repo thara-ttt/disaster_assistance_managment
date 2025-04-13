@@ -1,7 +1,11 @@
 ---
 
+
 - name: Download docker compose from S3
   aws_s3:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
     bucket: "{{ s3_bucket }}"
     object: "{{ s3_object }}"
     dest: "{{ docker_compose_path }}"
@@ -12,6 +16,9 @@
 
 - name: Download .env from s3
   aws_s3:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
     bucket: "{{ s3_bucket }}"
     object: "{{ s3_object_env }}"
     dest: "{{ env_path }}"
@@ -24,7 +31,6 @@
   command: docker compose -f {{ docker_compose_path }} down
   register: compose_down
   when: download_compose.changed or download_env.changed
-  workdir: "{{ docker_compose_path | dirname }}"
   args:
     chdir: "{{ docker_compose_path | dirname }}"
 
@@ -32,7 +38,6 @@
   command: docker compose -f {{ docker_compose_path }} pull
   register: compose_pull
   when: download_compose.changed or download_env.changed
-  workdir: "{{ docker_compose_path | dirname }}"
   args:
     chdir: "{{ docker_compose_path | dirname }}"
 
@@ -40,6 +45,5 @@
   command: docker compose -f {{ docker_compose_path }} up -d --remove-orphans
   register: compose_up
   when: download_compose.changed or download_env.changed
-  workdir: "{{ docker_compose_path | dirname }}"
   args:
     chdir: "{{ docker_compose_path | dirname }}"

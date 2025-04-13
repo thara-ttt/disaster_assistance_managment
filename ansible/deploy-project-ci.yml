@@ -12,8 +12,6 @@
   hosts: all
   become: true
   gather_facts: true
-  vars_files:
-    - devops-password.yml
   tasks:
     - name: Run docker compose
       include_tasks: roles/run-docker-compose/tasks/main.yml

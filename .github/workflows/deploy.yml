@@ -21,6 +21,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install awscli
+  
+      - name: Configure AWS CLI
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set region us-east-1
+          aws configure set output json
 
       - name: Upload docker-compose.yml and .env to S3
         run: |
@@ -61,4 +72,7 @@ jobs:
           --extra-vars "s3_object=${{ secrets.S3_OBJECT }}" \
           --extra-vars "s3_object_env=${{ secrets.S3_OBJECT_ENV }}" \
           --extra-vars "docker_compose_path=/home/ubuntu/docker-compose.yml" \
-          --extra-vars "env_path=/home/ubuntu/.env"
+          --extra-vars "env_path=/home/ubuntu/.env" \
+          --extra-vars "aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
+          --extra-vars "aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+          --extra-vars "aws_region=us-east-1"

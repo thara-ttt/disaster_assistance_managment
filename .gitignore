@@ -13,3 +13,6 @@ theme/
 .pytest_cache
 **/.terraform
 **/__pycache__/
+
+# ansible vault
+ansible/devops-password.yml
