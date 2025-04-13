@@ -10,9 +10,17 @@ describe("Test Recipient Dashboard", async () => {
         await sequelize.sync({ force: true })
     })
 
+    afterAll(async () => {
+        await sequelize.sync({ force: true })
+        await sequelize.drop({ force: true })
+        await sequelize.close()
+    })
+
+    const recipientUserName = `recipient${Date.now()}recipienttest`;
+
     const recipientUser=new User({
         fullName: 'Recipient',
-        email: 'recipient@recipient.com',
+        email: `${recipientUserName}@recipient.com`,
         password: '123456',
         role: 'recipient',
         zipcode: '52242'
@@ -25,7 +33,7 @@ describe("Test Recipient Dashboard", async () => {
         });
         
         const recipient = {
-            email: 'recipient@recipient.com',
+            email: `${recipientUserName}@recipient.com`,
             password: '123456',
         };
         

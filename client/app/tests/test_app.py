@@ -42,7 +42,7 @@ def test_register_page(app, client):
 def test_login_page(app, client):
 
     # Testing GET request
-    client.set_cookie('localhost', 'JWT', '')
+    client.set_cookie('JWT', '')
     response = client.get('/login', follow_redirects=True)
     assert response.status_code == 200
     assert b"DAMS Login" in response.data
@@ -137,7 +137,7 @@ def test_logout(app, client):
 
 def test_dashboard(app, client):
     # Testing GET request
-    client.set_cookie('localhost', 'JWT', '')
+    client.set_cookie('JWT', '')
     response = client.get('/dashboard', follow_redirects=True)
     assert response.status_code == 200
     assert b"Only Logged In Users have Access" in response.data

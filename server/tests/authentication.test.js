@@ -9,9 +9,16 @@ describe("Test Authentication", () => {
         await sequelize.sync({ force: true })
     })
 
+    afterAll(async () => {
+        await sequelize.sync({ force: true })
+        await sequelize.drop({ force: true })
+        await sequelize.close()
+    })
+
+    const user = `admin${Date.now()}authtest`;
     const adminUser=new User({
         fullName: 'Admin',
-        email: 'admin@admin.com',
+        email: `${user}@admin.com`,
         password: '123456',
         role: 'admin',
         zipcode: 'zipcode'
@@ -20,7 +27,7 @@ describe("Test Authentication", () => {
     it("Register User", async () => {
         const admin = {
             fullName:'John Doe',
-            email: 'admin@admin.com',
+            email: `${user}@admin.com`,
             password: '123456',
             role: 'admin',
             zipcode: '52242'
@@ -37,7 +44,7 @@ describe("Test Authentication", () => {
     it("Deleting User", async () => {
         const admin = {
             fullName:'John Doe',
-            email: 'admin@admin.com',
+            email: `${user}@admin.com`,
             password: '123456',
             role: 'admin',
             zipcode: '52242'
@@ -88,7 +95,7 @@ describe("Test Authentication", () => {
         });
         const admin = {
             fullName:'John Doe',
-            email: 'admin@admin.com',
+            email: `${user}@admin.com`,
             password: '123456',
             role: 'admin',
             zipcode: '52242'
@@ -108,7 +115,7 @@ describe("Test Authentication", () => {
             console.log("Error: ", err);
         });
         const admin = {
-            email: 'admin@admin.com',
+            email: `${user}@admin.com`,
             password: '123456',
         };
         await request(app)
@@ -144,7 +151,7 @@ describe("Test Authentication", () => {
             console.log("Error: ", err);
         });
         const admin = {
-            email: 'admin@admin.com',
+            email: `${user}@admin.com`,
             password: 'random',
         };
         await request(app)

@@ -1,6 +1,5 @@
 # Server side exclusions
 /server/node_modules
-/server/package-lock.json
 
 # Cliend side exclutions
 /client/env
@@ -13,3 +12,4 @@
 theme/
 .pytest_cache
 **/.terraform
+**/__pycache__/
