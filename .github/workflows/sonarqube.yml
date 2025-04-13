@@ -11,7 +11,8 @@ jobs:
       with:
         fetch-depth: 0
 
-    - uses: actions/download-artifacts@v4
+    - name: Download Artifacts
+      uses: actions/download-artifact@v4
 
     - name: SonarQube Scan
       uses: SonarSource/sonarqube-scan-action@v5
