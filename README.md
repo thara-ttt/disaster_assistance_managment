@@ -19,7 +19,7 @@ Python Flask and NodeJS based web application with MySQL for Disaster Assistance
 ## Getting Started
 Clone this repository
 ```sh
-git clone https://github.com/asad1996172/Disaster-Management-System
+git clone https://github.com/thara-ttt/disaster_management_system
 ```
 
 To enable administrator acces in VScode for Windows run ```Set-ExecutionPolicy Unrestricted```
