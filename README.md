@@ -1,43 +1,65 @@
-# Disaster Assitance Management System (DAMS)
+# Disaster Assistance Management System (DAMS)
 
+Disaster Assistance Management System (DAMS) is a Python Flask and Node.js-based web application with PostgreSQL for managing disaster assistance. This system allows **Admins**, **Helpers (Donors)**, and **Helpees (Recipients)** to collaborate effectively during disaster events. 
 
-Python Flask and NodeJS based web application with MySQL for Disaster Assistance Management System (DAMS). This system has 3 user types. Admin, Helpers and Helpees. Admin manages disaster events, helpees register them self to events and helpers provide resources for helpees.
+- **Admins** manage disaster events and oversee the system.
+- **Helpers** provide resources and assistance for disaster events.
+- **Helpees** register for disaster events and request resources.
 
+---
 
 ## Table of Contents
 
-* [Features](#Features)
-* [Installation](#installation)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Clone](#clone)
+
 
 ## Features
 
--   Information related to disaster events around the globe
--   Helpees registering to disaster events
--   Donors providing assistance for disaster events
--   Donors pledging to disastr events
+- **Disaster Event Management**:
+  - Admins can create, update, and manage disaster events.
+- **Resource Requests**:
+  - Helpees can request resources related to disaster events.
+- **Donor Assistance**:
+  - Helpers can pledge and provide resources for disaster events.
+- **Real-time Collaboration**:
+  - Facilitates communication between Admins, Helpers, and Helpees.
+- **Code Quality and Testing**:
+  - Integrated with SonarQube for code quality analysis.
+  - Automated testing with Jest (backend) and Pytest (frontend).
 
-## Getting Started
-Clone this repository
+---
+
+## Technologies Used
+
+### **Frontend**
+- **Python Flask**: For rendering templates and handling client-side logic.
+- **HTML, CSS, JavaScript**: For building the user interface.
+- **Bootstrap**: For responsive design.
+- **AOS (Animate On Scroll)**: For animations.
+
+### **Backend**
+- **Node.js**: For handling server-side logic.
+- **Express.js**: For building RESTful APIs.
+- **Sequelize ORM**: For interacting with the PostgreSQL database.
+- **JWT (JSON Web Tokens)**: For authentication and role-based access control.
+
+### **Database**
+- **PostgreSQL**: For storing disaster events, user data, and resource requests.
+
+### **DevOps Tools**
+- **Ansible**: For automating deployment and configuration.
+- **Docker**: For containerizing the application.
+- **GitHub Actions**: For CI/CD workflows.
+- **SonarQube**: For code quality and security analysis.
+- **AWS EC2**: For hosting the application.
+
+---
+
+## Clone
+
+### Clone the Repository
 ```sh
 git clone https://github.com/thara-ttt/disaster_management_system
 ```
-
-To enable administrator acces in VScode for Windows run ```Set-ExecutionPolicy Unrestricted```
-
-### Setting up Server-side
-1) Install NodeJS
-2) Install XAMPP: ```https://sourceforge.net/projects/xampp/files/XAMPP%20Mac%20OS%20X/8.0.2/```
-3) Run mysql server and apache server from Xampp Control Manager
-4) Go to server directory and run ```npm install``` to install node modules
-5) Run ```npm run server``` to start backend server
-6) Run ```npm run test``` to run tests and generate coverage report
-
-### Setting up Client-side
-1) Go to client directory and create virtualenv using Python 3.6.5 ```virtualenv -p python3 env```
-2) Activate virtual environment ```source env/bin/activate``` For Mac and ```.\env\Scripts\activate``` For Windows
-3) Install required python libraries ```pip install -r requirements.txt```
-4) Run client server ```python app.py```
-7) Run python tests and generate coverage report ```pytest --cov=app --cov-report=html:coverage -s```
-
-## Demo
-[![Video Instructions to Run Code](https://i.ytimg.com/vi/d5w7kfwUHgI/hqdefault.jpg)](https://www.youtube.com/watch?v=d5w7kfwUHgI)
